@@ -1,11 +1,12 @@
 package main
 
 import (
-	"bufio"
 	"flag"
 	"fmt"
+	"github.com/fatih/color"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 func check(e error) {
@@ -38,39 +39,24 @@ func createFileOrListBookmarks(fileLocation *string) {
 	listBookmarks(fileLocation)
 }
 
-func addBookmark(fileLocation *string) {
-	reader := bufio.NewReader(os.Stdin)
-
-	fmt.Print("Add a new bookmark (y/N)? ")
-	response, err := reader.ReadString('\n')
-	check(err)
-
-	if response != "y\n" {
-		return
-	}
-
-	fmt.Print("Add a link: ")
-	bookmark, err := reader.ReadString('\n')
-	check(err)
-
-	fmt.Print("Add a title for that link: ")
-	bookmarkTitle, err := reader.ReadString('\n')
-	check(err)
-
-	writeBookmark(bookmark, bookmarkTitle, fileLocation)
-}
-
-func writeBookmark(bookmark string, bookmarkTitle string, fileLocation *string) {
-	file, err := os.OpenFile(*fileLocation, os.O_APPEND|os.O_WRONLY, 0666)
-	check(err)
-
-	_, err = file.WriteString(bookmarkTitle[:len(bookmarkTitle)-1] + ": " + bookmark)
-	check(err)
-}
-
 func listBookmarks(filename *string) {
 	content, err := ioutil.ReadFile(*filename)
 	check(err)
 	contentString := string(content)
-	fmt.Print(contentString)
+	c := color.New(color.FgCyan)
+	c.Println(contentString)
+	parseBookmarksFile(contentString)
+}
+
+func parseBookmarksFile(contentString string) {
+	bookmarksStrings := strings.Split(contentString, "\n\n")
+	var bookmarksToPrint []bookmark
+
+	for _, element := range bookmarksStrings {
+		elementSpliced := strings.Split(element, "\n")
+		spliceForTitle := strings.Split(elementSpliced[0], ": ")
+		tempBookmark := bookmark{url: spliceForTitle[1], title: spliceForTitle[0], comment: elementSpliced[1]}
+		bookmarksToPrint = append(bookmarksToPrint, tempBookmark)
+	}
+	fmt.Println(bookmarksToPrint)
 }
