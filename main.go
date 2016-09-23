@@ -3,10 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/fatih/color"
-	"io/ioutil"
 	"os"
-	"strings"
 )
 
 func check(e error) {
@@ -37,26 +34,4 @@ func createFileOrListBookmarks(fileLocation *string) {
 		addBookmark(fileLocation)
 	}
 	listBookmarks(fileLocation)
-}
-
-func listBookmarks(filename *string) {
-	content, err := ioutil.ReadFile(*filename)
-	check(err)
-	contentString := string(content)
-	c := color.New(color.FgCyan)
-	c.Println(contentString)
-	parseBookmarksFile(contentString)
-}
-
-func parseBookmarksFile(contentString string) {
-	bookmarksStrings := strings.Split(contentString, "\n\n")
-	var bookmarksToPrint []bookmark
-
-	for _, element := range bookmarksStrings {
-		elementSpliced := strings.Split(element, "\n")
-		spliceForTitle := strings.Split(elementSpliced[0], ": ")
-		tempBookmark := bookmark{url: spliceForTitle[1], title: spliceForTitle[0], comment: elementSpliced[1]}
-		bookmarksToPrint = append(bookmarksToPrint, tempBookmark)
-	}
-	fmt.Println(bookmarksToPrint)
 }
