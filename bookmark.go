@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strconv"
 )
@@ -12,6 +13,30 @@ type bookmark struct {
 	url     string
 	title   string
 	comment string
+}
+
+func deleteBookmark(bookmarkToDelete bookmark, bookmarks []bookmark, fileLocation *string) {
+	reader := bufio.NewReader(os.Stdin)
+
+	fmt.Printf(printBookmark(bookmarkToDelete))
+	fmt.Printf("Delete bookmark (y/N)? ")
+	response, err := reader.ReadString('\n')
+	check(err)
+
+	if response == "y\n" {
+		removeFromFile(bookmarks, fileLocation)
+	}
+	return
+}
+
+func removeFromFile(bookmarks []bookmark, fileLocation *string) {
+	err := ioutil.WriteFile(*fileLocation, []byte(""), 0644)
+	check(err)
+
+	for _, element := range bookmarks {
+		writeBookmark(element, fileLocation)
+	}
+
 }
 
 func addBookmark(fileLocation *string) {
@@ -30,24 +55,28 @@ func addBookmark(fileLocation *string) {
 	fmt.Print("Add a link: ")
 	url, err := reader.ReadString('\n')
 	check(err)
+	url = url[:len(url)-1]
 
 	fmt.Print("Add a title for that link: ")
-	bookmarkTitle, err := reader.ReadString('\n')
+	title, err := reader.ReadString('\n')
 	check(err)
+	title = title[:len(title)-1]
 
 	fmt.Print("Add a comment: ")
-	bookmarkComment, err := reader.ReadString('\n')
+	comment, err := reader.ReadString('\n')
+	check(err)
+	comment = comment[:len(comment)-1]
 
 	contentString := getFileContent(fileLocation)
 
 	if contentString != "" {
-		parsedBookmarks := parseBookmarksFile(contentString)
+		parsedBookmarks := parseBookmarksFile(fileLocation)
 		bookmarkID = getLastID(parsedBookmarks) + 1
 	} else {
 		bookmarkID = 0
 	}
 
-	newBookmark := bookmark{id: bookmarkID, url: url, title: bookmarkTitle, comment: bookmarkComment}
+	newBookmark := bookmark{id: bookmarkID, url: url, title: title, comment: comment}
 	writeBookmark(newBookmark, fileLocation)
 
 }
@@ -56,7 +85,7 @@ func writeBookmark(newBookmark bookmark, fileLocation *string) {
 	file, err := os.OpenFile(*fileLocation, os.O_APPEND|os.O_WRONLY, 0666)
 	check(err)
 
-	_, err = file.WriteString(strconv.Itoa(newBookmark.id) + ". " + newBookmark.title[:len(newBookmark.title)-1] + ": " + newBookmark.url + "\t" + "// " + newBookmark.comment + "\n")
+	_, err = file.WriteString(strconv.Itoa(newBookmark.id) + ". " + newBookmark.title + ": " + newBookmark.url + "\n\t" + "// " + newBookmark.comment + "\n\n")
 	check(err)
 }
 
