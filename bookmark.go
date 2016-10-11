@@ -3,9 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"os"
-	"strconv"
 )
 
 type bookmark struct {
@@ -13,6 +11,7 @@ type bookmark struct {
 	url     string
 	title   string
 	comment string
+	tags    []string
 }
 
 func deleteBookmark(bookmarkToDelete bookmark, bookmarks []bookmark, fileLocation *string) {
@@ -27,16 +26,6 @@ func deleteBookmark(bookmarkToDelete bookmark, bookmarks []bookmark, fileLocatio
 		removeFromFile(bookmarks, fileLocation)
 	}
 	return
-}
-
-func removeFromFile(bookmarks []bookmark, fileLocation *string) {
-	err := ioutil.WriteFile(*fileLocation, []byte(""), 0644)
-	check(err)
-
-	for _, element := range bookmarks {
-		writeBookmark(element, fileLocation)
-	}
-
 }
 
 func addBookmark(fileLocation *string) {
@@ -67,6 +56,9 @@ func addBookmark(fileLocation *string) {
 	check(err)
 	comment = comment[:len(comment)-1]
 
+	var tags []string
+	tags = getTags(reader, &tags)
+
 	contentString := getFileContent(fileLocation)
 
 	if contentString != "" {
@@ -76,17 +68,22 @@ func addBookmark(fileLocation *string) {
 		bookmarkID = 0
 	}
 
-	newBookmark := bookmark{id: bookmarkID, url: url, title: title, comment: comment}
+	newBookmark := bookmark{id: bookmarkID, url: url, title: title, comment: comment, tags: tags}
 	writeBookmark(newBookmark, fileLocation)
 
 }
 
-func writeBookmark(newBookmark bookmark, fileLocation *string) {
-	file, err := os.OpenFile(*fileLocation, os.O_APPEND|os.O_WRONLY, 0666)
+func getTags(reader *bufio.Reader, tags *[]string) []string {
+	fmt.Print("Add a tag (empty to stop): ")
+	tag, err := reader.ReadString('\n')
 	check(err)
-
-	_, err = file.WriteString(strconv.Itoa(newBookmark.id) + ". " + newBookmark.title + ": " + newBookmark.url + "\n\t" + "// " + newBookmark.comment + "\n\n")
-	check(err)
+	if tag == "\n" {
+		return *tags
+	}
+	tag = tag[:len(tag)-1]
+	mytags := *tags
+	*tags = append(mytags, tag)
+	return getTags(reader, tags)
 }
 
 func getLastID(parsedBookmarks []bookmark) int {

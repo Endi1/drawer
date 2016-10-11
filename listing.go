@@ -32,8 +32,9 @@ func printBookmark(bookmarkToPrint bookmark) string {
 	urlColor := color.New(color.FgBlue).SprintFunc()
 	commentColor := color.New(color.FgWhite).SprintFunc()
 	IDColor := color.New(color.FgYellow).SprintFunc()
+	tagsColor := color.New(color.FgRed).SprintFunc()
 
-	stringToPrint = fmt.Sprintf("%s. %s: %s \n%4s\n\n", IDColor(bookmarkToPrint.id), titleColor(bookmarkToPrint.title), urlColor(bookmarkToPrint.url), commentColor(bookmarkToPrint.comment))
+	stringToPrint = fmt.Sprintf("%s. %s: %s \n%4s\n%s\n\n", IDColor(bookmarkToPrint.id), titleColor(bookmarkToPrint.title), urlColor(bookmarkToPrint.url), commentColor(bookmarkToPrint.comment), tagsColor(tagsToString(bookmarkToPrint.tags)))
 
 	return stringToPrint
 }
