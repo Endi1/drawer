@@ -41,7 +41,11 @@ func tagsToSplice(tagsString string) []string {
 	var tags []string
 	splitTags := strings.Split(tagsString, " ")
 
-	for _, element := range splitTags[0 : len(splitTags)-1] {
+	if len(splitTags[0]) == 1 {
+		return tags
+	}
+
+	for _, element := range splitTags {
 		if element[0:1] == "\t" {
 			// First tag
 			tags = append(tags, element[2:])

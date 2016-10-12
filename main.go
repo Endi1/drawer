@@ -18,6 +18,7 @@ func main() {
 	addBookmarkBool := flag.Bool("a", false, "add a new bookmark")
 	searchBookmarkID := flag.String("i", "", "get the bookmark with id")
 	deleteBookmarkID := flag.String("d", "", "delete bookmark with this id")
+	tagToSearch := flag.String("t", "", "get bookmarks with this tag")
 
 	flag.Parse()
 	fmt.Println("file:" + *fileLocation)
@@ -40,6 +41,11 @@ func main() {
 		check(err)
 
 		deleteBookmarkByID(deleteBookmarkIDInt, fileLocation)
+		return
+	}
+
+	if *tagToSearch != "" {
+		searchBookmarksByTag(tagToSearch, fileLocation)
 		return
 	}
 
@@ -76,4 +82,15 @@ func createFileOrListBookmarks(fileLocation *string) {
 		addBookmark(fileLocation)
 	}
 	listBookmarks(fileLocation)
+}
+
+func searchBookmarksByTag(tag *string, fileLocation *string) {
+	bookmarks := parseBookmarksFile(fileLocation)
+	for _, bookmark := range bookmarks {
+		for _, element := range bookmark.tags {
+			if element == *tag {
+				fmt.Printf(printBookmark(bookmark))
+			}
+		}
+	}
 }

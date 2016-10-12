@@ -8,8 +8,13 @@ import (
 
 func tagsToString(tags []string) string {
 	var tagsString string
-	for _, element := range tags {
-		tagsString = tagsString + "#" + element + " "
+
+	for i, element := range tags {
+		if i != len(tags)-1 {
+			tagsString = tagsString + "#" + element + " "
+		} else {
+			tagsString = tagsString + "#" + element
+		}
 	}
 
 	return tagsString
