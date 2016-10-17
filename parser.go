@@ -1,6 +1,7 @@
 package main
 
 import (
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -11,17 +12,19 @@ func parseBookmarksFile(filename *string) []bookmark {
 	var parsedBookmarks []bookmark
 
 	for _, element := range splitBookmarks[0 : len(splitBookmarks)-1] {
+		var comment string
+		var tags []string
+
 		secondaryPart := strings.Split(element, "\n") // Splice each bookmark between title+url and the rest
-		comment := parseBookmarkComment(secondaryPart[1])
-		tags := tagsToSplice(secondaryPart[2])
 
-		mainPart := strings.Split(secondaryPart[0], ": h") // Splice title+url in title and url
-		mainPartTitleID := strings.Split(mainPart[0], ". ")
+		if len(secondaryPart) == 2 {
+			comment, tags = getCommentOrTags(secondaryPart[1])
+		} else {
+			comment = parseBookmarkComment(secondaryPart[1])
+			tags = tagsToSplice(secondaryPart[2])
+		}
 
-		bookmarkID, err := strconv.Atoi(mainPartTitleID[0])
-		check(err)
-
-		formattedBookmark := bookmark{id: bookmarkID, url: "h" + mainPart[1], title: mainPartTitleID[1], comment: comment, tags: tags}
+		formattedBookmark := bookmark{id: parseID(secondaryPart[0]), url: parseURL(secondaryPart[0]), title: parseTitle(secondaryPart[0]), comment: comment, tags: tags}
 		parsedBookmarks = append(parsedBookmarks, formattedBookmark)
 	}
 
@@ -29,29 +32,61 @@ func parseBookmarksFile(filename *string) []bookmark {
 
 }
 
-func parseBookmarkComment(content string) string {
+func parseTitle(mainPart string) string {
+	re := regexp.MustCompile(`\d[.](\s\S+)*[:]\s?h`)
+	title := re.FindString(mainPart)
 
-	if len(content) == 4 {
-		return ""
+	re = regexp.MustCompile(`\d[.](\s?)`)
+	title = re.ReplaceAllLiteralString(title, "")
+
+	re = regexp.MustCompile(`\s?[:]\s?h`)
+	return re.ReplaceAllLiteralString(title, "")
+}
+
+func parseURL(mainPart string) string {
+	re := regexp.MustCompile(`:(\s?https?://\S+)`)
+	url := re.FindString(mainPart)
+
+	re = regexp.MustCompile(`:(\s?)h`)
+	return re.ReplaceAllLiteralString(url, "h")
+}
+
+func parseID(mainPart string) int {
+	re := regexp.MustCompile(`\d+[.]`)
+
+	id := re.FindString(mainPart)
+	id = strings.Replace(id, ".", "", -1)
+
+	bookmarkID, err := strconv.Atoi(id)
+	check(err)
+
+	return bookmarkID
+}
+
+func getCommentOrTags(secondaryPart string) (string, []string) {
+	comment, err := regexp.MatchString("^(//)", secondaryPart)
+	check(err)
+
+	if comment {
+		return parseBookmarkComment(secondaryPart), []string{}
 	}
-	return content[3:]
+	return "", tagsToSplice(secondaryPart)
+
+}
+
+func parseBookmarkComment(content string) string {
+	re := regexp.MustCompile(`//(\s?\S+)*`)
+	return re.FindString(content)
 }
 
 func tagsToSplice(tagsString string) []string {
-	var tags []string
-	splitTags := strings.Split(tagsString, " ")
+	re := regexp.MustCompile(`#([a-z]|\s)*`)
+	tags := re.FindAllString(tagsString, -1)
 
-	if len(splitTags[0]) == 1 {
-		return tags
+	for i, tag := range tags {
+		tags[i] = strings.Replace(tag, "#", "", -1)
 	}
 
-	for _, element := range splitTags {
-		if element[0:1] == "\t" {
-			// First tag
-			tags = append(tags, element[2:])
-		} else {
-			tags = append(tags, element[1:])
-		}
-	}
 	return tags
+
 }
