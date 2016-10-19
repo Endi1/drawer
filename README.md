@@ -61,19 +61,24 @@ in the same directory where your bookmarks file is.
 You will then be prompted with these steps:
 
 1. Add a new bookmark (Y/n)?
+
    Pretty self-explanatory. "n" for no and "y" or empty for yes.
    
 2. Add a link:
+
    The bookmark URL. **Needs to start with the protocol (https:// or http://)**
    
 3. Add a title for that link:
+
    The title for that bookmark. Can be empty
    
 4. Add a comment: 
+
    In case you want to add a comment for that bookmark
    you can do so here. Otherwise leave empty.
    
 5. Add a tag (empty to stop): 
+
    In case you want to add tags to separate
    bookmarks in different categories so that they can be searched
    easier, you can do so here. As long as you add a tag it will keep
