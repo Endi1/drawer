@@ -5,7 +5,7 @@
 ### Table of contents
 1. [Installation](#installation)
 2. [Quickstart](#quickstart)
-3. [Adding bookmarks from the CLI](#adding)
+3. [Adding bookmarks from the CLI](#adding-bookmarks-from-the-cli)
 
 
 # Installation
