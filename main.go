@@ -14,7 +14,7 @@ func check(e error) {
 }
 
 func main() {
-	fileLocation := flag.String("f", ".mypocket", "location of bookmark file")
+	fileLocation := flag.String("f", ".mydrawer", "location of bookmark file")
 	addBookmarkBool := flag.Bool("a", false, "add a new bookmark")
 	searchBookmarkID := flag.String("i", "", "get the bookmark with id")
 	deleteBookmarkID := flag.String("d", "", "delete bookmark with this id")

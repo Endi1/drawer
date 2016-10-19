@@ -6,6 +6,9 @@
 1. [Installation](#installation)
 2. [Quickstart](#quickstart)
 3. [Adding bookmarks from the CLI](#adding-bookmarks-from-the-cli)
+4. [Finding and displaying bookmarks](#finding-and-displaying-bookmarks)
+   a. [By ID](#by-id)
+   b. [By tag](#by-tag)
 
 
 # Installation
@@ -84,3 +87,59 @@ You will then be prompted with these steps:
    easier, you can do so here. As long as you add a tag it will keep
    asking you for one (you can add more than one tag). If you are done
    adding tags, just press "Enter" without writing anything.
+
+### Example
+
+```
+$ drawer -a
+file:.mydrawer
+> Add a new bookmark (Y/n)? y
+> Add a link: https://google.com
+> Add a title for that link: Google
+> Add a comment: This is a search engine
+> Add a tag (empty to stop): search engine
+> Add a tag (empty to stop):
+```
+
+Now typing `drawer` in the terminal will yield:
+
+```
+file:.mydrawer
+0. Google: https://google.com
+// This is a search engine
+#search engine
+```
+
+# Finding and displaying bookmarks
+
+To display all your saved bookmarks you can run just `drawer` and it
+will list all the bookmarks in the drawer file.
+
+## By id
+
+If you want to display only one bookmark of which you know the ID. You
+can use the `-i` flag. From the previous example:
+
+```
+$ drawer -i 0
+
+file:.mydrawer
+0. Google: https://google.com
+// This is a search engine
+#search engine
+```
+
+## By tag
+
+To display bookmarks that have a certain tag, you can use the `-t`
+flag. From the previous example:
+
+```
+$ drawer -t search engine
+
+file:.mydrawer
+0. Google: https://google.com
+// This is a search engine
+#search engine
+```
+
