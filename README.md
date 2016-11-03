@@ -6,7 +6,7 @@
 1. [Installation](#installation)
 2. [Quickstart](#quickstart)
 3. [Adding bookmarks from the CLI](#adding-bookmarks-from-the-cli)
-4. [Finding and displaying bookmarks](#finding-and-displaying-bookmarks)
+4. [Finding and displaying bookmarks](#finding-and-displaying-bookmarks)  
    a. [By ID](#by-id)
    b. [By tag](#by-tag)
 
