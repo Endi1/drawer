@@ -80,7 +80,7 @@ func parseBookmarkComment(content string) string {
 }
 
 func tagsToSplice(tagsString string) []string {
-	re := regexp.MustCompile(`#([a-z]|\s)*`)
+	re := regexp.MustCompile(`#([a-zA-Z]|\s)*`)
 	tags := re.FindAllString(tagsString, -1)
 
 	for i, tag := range tags {
