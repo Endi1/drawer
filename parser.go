@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -8,10 +9,12 @@ import (
 
 func parseBookmarksFile(filename *string) []bookmark {
 	contentString := getFileContent(filename)
-	splitBookmarks := strings.Split(contentString, "\n\n")
-	var parsedBookmarks []bookmark
+	re := regexp.MustCompile(`\d+(\S\s?)*`)
+	splitBookmarks := re.FindAllString(contentString, -1)
 
-	for _, element := range splitBookmarks[0 : len(splitBookmarks)-1] {
+	var parsedBookmarks []bookmark
+	for _, element := range splitBookmarks {
+		fmt.Println(element)
 		var comment string
 		var tags []string
 
