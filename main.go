@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/atotto/clipboard"
 )
 
 func check(e error) {
@@ -19,6 +21,7 @@ func main() {
 	searchBookmarkID := flag.String("i", "", "get the bookmark with id")
 	deleteBookmarkID := flag.String("d", "", "delete bookmark with this id")
 	tagToSearch := flag.String("t", "", "get bookmarks with this tag")
+	copyBookmark := flag.String("c", "", "[bookmark id] copy URL for bookmark with this id")
 
 	flag.Parse()
 	fmt.Println("file:" + *fileLocation)
@@ -49,8 +52,26 @@ func main() {
 		return
 	}
 
+	if *copyBookmark != "" {
+		copyBookmarkIDInt, err := strconv.Atoi(*copyBookmark)
+		check(err)
+
+		copyBookmarkById(copyBookmarkIDInt, fileLocation)
+	}
+
 	createFileOrListBookmarks(fileLocation)
 
+}
+
+func copyBookmarkById(id int, fileLocation *string) {
+	var bookmarkToCopy bookmark
+	bookmarks := parseBookmarksFile(fileLocation)
+	for _, element := range bookmarks {
+		if element.id == id {
+			bookmarkToCopy = element
+		}
+	}
+	clipboard.WriteAll(bookmarkToCopy.url)
 }
 
 func deleteBookmarkByID(id int, fileLocation *string) {
