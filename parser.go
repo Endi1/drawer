@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -14,7 +13,6 @@ func parseBookmarksFile(filename *string) []bookmark {
 
 	var parsedBookmarks []bookmark
 	for _, element := range splitBookmarks {
-		fmt.Println(element)
 		var comment string
 		var tags []string
 
@@ -79,7 +77,9 @@ func getCommentOrTags(secondaryPart string) (string, []string) {
 
 func parseBookmarkComment(content string) string {
 	re := regexp.MustCompile(`//(\s?\S+)*`)
-	return re.FindString(content)
+	comment := re.FindString(content)
+
+	return strings.Replace(comment, "//", "", -1)
 }
 
 func tagsToSplice(tagsString string) []string {

@@ -21,7 +21,7 @@ func getFileContent(filename *string) string {
 func printBookmarks(bookmarksToPrint []bookmark) {
 
 	for _, element := range bookmarksToPrint {
-		fmt.Printf(printBookmark(element))
+		fmt.Printf(printBookmark(element) + "\n")
 	}
 }
 
@@ -29,12 +29,19 @@ func printBookmark(bookmarkToPrint bookmark) string {
 	var stringToPrint string
 
 	titleColor := color.New(color.FgCyan).SprintFunc()
-	urlColor := color.New(color.FgBlue).SprintFunc()
 	commentColor := color.New(color.FgWhite).SprintFunc()
 	IDColor := color.New(color.FgYellow).SprintFunc()
 	tagsColor := color.New(color.FgRed).SprintFunc()
 
-	stringToPrint = fmt.Sprintf("%s. %s: %s \n%4s\n%s\n\n", IDColor(bookmarkToPrint.id), titleColor(bookmarkToPrint.title), urlColor(bookmarkToPrint.url), commentColor(bookmarkToPrint.comment), tagsColor(tagsToString(bookmarkToPrint.tags)))
+	stringToPrint = IDColor(bookmarkToPrint.id) + ". " + titleColor(bookmarkToPrint.title) + ": " + bookmarkToPrint.url + "\n"
+
+	if bookmarkToPrint.comment != "" {
+		stringToPrint += commentColor("// "+bookmarkToPrint.comment) + "\n"
+	}
+
+	if len(bookmarkToPrint.tags) != 0 {
+		stringToPrint += tagsColor(tagsToString(bookmarkToPrint.tags)) + "\n"
+	}
 
 	return stringToPrint
 }

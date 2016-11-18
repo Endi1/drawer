@@ -57,6 +57,7 @@ func main() {
 		check(err)
 
 		copyBookmarkById(copyBookmarkIDInt, fileLocation)
+		return
 	}
 
 	createFileOrListBookmarks(fileLocation)
@@ -72,6 +73,11 @@ func copyBookmarkById(id int, fileLocation *string) {
 		}
 	}
 	clipboard.WriteAll(bookmarkToCopy.url)
+
+	fmt.Println("Copied bookmark:")
+	fmt.Printf(printBookmark(bookmarkToCopy))
+
+	return
 }
 
 func deleteBookmarkByID(id int, fileLocation *string) {
