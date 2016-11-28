@@ -35,6 +35,6 @@ func writeBookmark(newBookmark bookmark, fileLocation *string) {
 	check(err)
 
 	_, err = file.WriteString(
-		strconv.Itoa(newBookmark.id) + ". " + newBookmark.title + ": " + newBookmark.url + "\n" + "// " + newBookmark.comment + "\n" + tagsToString(newBookmark.tags) + "\n\n")
+		strconv.Itoa(newBookmark.id) + ". " + newBookmark.title + ": " + newBookmark.url + "\n" + "//" + newBookmark.comment + "\n" + tagsToString(newBookmark.tags) + "\n\n")
 	check(err)
 }
