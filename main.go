@@ -56,7 +56,7 @@ func main() {
 		copyBookmarkIDInt, err := strconv.Atoi(*copyBookmark)
 		check(err)
 
-		copyBookmarkById(copyBookmarkIDInt, fileLocation)
+		copyBookmarkByID(copyBookmarkIDInt, fileLocation)
 		return
 	}
 
@@ -64,7 +64,7 @@ func main() {
 
 }
 
-func copyBookmarkById(id int, fileLocation *string) {
+func copyBookmarkByID(id int, fileLocation *string) {
 	var bookmarkToCopy bookmark
 	bookmarks := parseBookmarksFile(fileLocation)
 	for _, element := range bookmarks {
