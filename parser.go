@@ -2,9 +2,6 @@ package main
 
 import (
 	"log"
-	"regexp"
-	"strconv"
-	"strings"
 
 	"gopkg.in/yaml.v2"
 )
