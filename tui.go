@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/endi1/drawer/drawer"
 	"github.com/gdamore/tcell"
 	"github.com/rivo/tview"
 	"os/exec"
@@ -14,7 +15,7 @@ type tui struct {
 	fileLocation *string
 }
 
-func Init(bookmarks *[]bookmark, fileLocation *string) {
+func Init(bookmarks *[]drawer.BookmarkObject, fileLocation *string) {
 	app := tview.NewApplication()
 	pages := tview.NewPages()
 	t := tui{app: app, pages: pages, fileLocation: fileLocation}
@@ -29,12 +30,12 @@ func Init(bookmarks *[]bookmark, fileLocation *string) {
 	}
 }
 
-func (t *tui) list(bookmarks *[]bookmark) *tview.List {
+func (t *tui) list(bookmarks *[]drawer.BookmarkObject) *tview.List {
 	list := tview.NewList()
 
 	for _, bookmark := range *bookmarks {
-		list.AddItem(bookmark.title, bookmark.url, 0, func() {
-			command := exec.Command("xdg-open", bookmark.url)
+		list.AddItem(bookmark.GetTitle(), bookmark.GetURL(), 0, func() {
+			command := exec.Command("xdg-open", bookmark.GetURL())
 			err := command.Run()
 			check(err)
 		})

@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"github.com/endi1/drawer/drawer"
 	"github.com/fatih/color"
 	"io/ioutil"
 )
 
-func listBookmarks(filename *string) {
-	bookmarksToPrint := parseBookmarksFile(filename)
-	Init(&bookmarksToPrint, filename)
+func listBookmarks(fileLocation *string) {
+	bookmarksToPrint := drawer.GetWrittenBookmarkObjects(fileLocation)
+	Init(bookmarksToPrint, fileLocation)
 }
 
 func getFileContent(filename *string) string {

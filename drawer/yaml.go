@@ -53,13 +53,27 @@ func GetWrittenBookmarks(fileLocation *string) *[]YAMLBookmark {
 	return &t.Bookmarks
 }
 
+func GetWrittenBookmarkObjects(fileLocation *string) *[]BookmarkObject {
+	writtenBookmarks := GetWrittenBookmarks(fileLocation)
+	var bookmarks []BookmarkObject
+	for index, b := range *writtenBookmarks {
+		bookmark := NewBookmark(index,
+			b.URL,
+			b.Title,
+			b.Comment,
+			b.Tags)
+		bookmarks = append(bookmarks, *bookmark)
+	}
+	return &bookmarks
+}
+
 func WriteBookmarkToFile(bookmark BookmarkObject, fileLocation *string) {
 	unmarshaledContent := getUnmarshaledContent(fileLocation)
 	yamlBookmark := YAMLBookmark{
-		Title:   *bookmark.getTitle(),
-		URL:     *bookmark.getURL(),
-		Comment: *bookmark.getComment(),
-		Tags:    *bookmark.getTags(),
+		Title:   bookmark.GetTitle(),
+		URL:     bookmark.GetURL(),
+		Comment: bookmark.GetComment(),
+		Tags:    bookmark.GetTags(),
 	}
 	unmarshaledContent.Bookmarks = append(unmarshaledContent.Bookmarks,
 		yamlBookmark)

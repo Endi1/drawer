@@ -1,14 +1,14 @@
 package drawer
 
 type BookmarkObject struct {
-	id      *int
-	url     *string
-	title   *string
-	comment *string
-	tags    *[]string
+	id      int
+	url     string
+	title   string
+	comment string
+	tags    []string
 }
 
-func NewBookmark(id *int, url *string, title *string, comment *string, tags *[]string) *BookmarkObject {
+func NewBookmark(id int, url string, title string, comment string, tags []string) *BookmarkObject {
 	return &BookmarkObject{
 		id:      id,
 		title:   title,
@@ -18,18 +18,18 @@ func NewBookmark(id *int, url *string, title *string, comment *string, tags *[]s
 	}
 }
 
-func (b *BookmarkObject) getTitle() *string {
+func (b *BookmarkObject) GetTitle() string {
 	return b.title
 }
 
-func (b *BookmarkObject) getURL() *string {
+func (b *BookmarkObject) GetURL() string {
 	return b.url
 }
 
-func (b *BookmarkObject) getComment() *string {
+func (b *BookmarkObject) GetComment() string {
 	return b.comment
 }
 
-func (b *BookmarkObject) getTags() *[]string {
+func (b *BookmarkObject) GetTags() []string {
 	return b.tags
 }
