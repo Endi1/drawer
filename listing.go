@@ -8,7 +8,7 @@ import (
 
 func listBookmarks(filename *string) {
 	bookmarksToPrint := parseBookmarksFile(filename)
-	printBookmarks(bookmarksToPrint)
+	Init(&bookmarksToPrint, filename)
 }
 
 func getFileContent(filename *string) string {
